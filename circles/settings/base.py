@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'guardian',
-    'rest_framework_swagger'
+    'rest_framework_swagger',
+    'circlescore',
 ]
 
 MIDDLEWARE = [
