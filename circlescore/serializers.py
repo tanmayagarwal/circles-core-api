@@ -53,6 +53,7 @@ class HikayaUserSerializer(serializers.HyperlinkedModelSerializer):
     )
     id = serializers.ReadOnlyField()
     user_object = serializers.SerializerMethodField()
+
     class Meta:
         model = HikayaUser
         fields = '__all__'
