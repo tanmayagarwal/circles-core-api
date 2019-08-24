@@ -101,6 +101,17 @@ def auth_login(request):
     return Response({'error': error_message}, status=status.HTTP_403_FORBIDDEN)
 
 
+class DocumentViewSet(viewsets.ModelViewSet):
+    """
+    Document Model View
+    """
+    model = Document
+    serializer_class = DocumentSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = Document.objects.all()
+    lookup_field = 'document_uuid'
+
+
 class WorkspaceViewSet(viewsets.ModelViewSet):
     """
     Workspace View
@@ -110,9 +121,6 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Workspace.objects.all()
     lookup_field = 'uuid'
-
-    class Meta:
-        depth = 1
 
 
 class HikayaUserViewSet(viewsets.ModelViewSet):
@@ -126,5 +134,5 @@ class HikayaUserViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     lookup_field = 'hikaya_user_uuid'
 
-    class Meta:
-        depth = 1
+
+

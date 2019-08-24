@@ -7,6 +7,7 @@ router = routers.SimpleRouter()
 
 router.register(r'user', UserViewSet)
 router.register(r'group', GroupViewSet)
+router.register(r'document', DocumentViewSet)
 router.register(r'workspace', WorkspaceViewSet)
 router.register(r'hikayauser', HikayaUserViewSet)
 

@@ -67,3 +67,13 @@ class WorkspaceModelTest(TestCase):
         self.assertEqual(created_workspace.id, workspace.id)
 
 
+class DocumentModelTest(TestCase):
+    def setUp(self):
+        self.test_document = {'name': 'Document 1', 'url': 'http://test.com'}
+
+    def test_document_model_create(self):
+        document = Document.objects.create(**self.test_document)
+        created_document = Document.objects.get(name='Document 1')
+
+        self.assertEqual(len(Document.objects.all()), 1)
+        self.assertEqual(created_document.id, document.id)

@@ -14,6 +14,7 @@ class Document(models.Model):
     """
     Documentation Model
     """
+    document_uuid = models.UUIDField(editable=False, verbose_name='Document UUID', default=uuid.uuid4, unique=True)
     name = models.CharField(
         'Name of Document', max_length=135, blank=True, null=True)
     url = models.CharField(
@@ -39,18 +40,16 @@ class Document(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = get_request().user
 
         self.edit_date = timezone.now()
-        self.modified_by = get_request().user
-        return super(Workspace, self).save(*args, **kwargs)
+        return super(Document, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
     @property
     def name_n_url(self):
-        return "%s %s" % (self.name, self.url)
+        return "%s - %s" % (self.name, self.url)
 
 
 class Workspace(models.Model):

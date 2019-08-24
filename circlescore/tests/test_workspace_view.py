@@ -65,12 +65,13 @@ class WorkspaceViewTest(APITestCase):
         # getting the deleted item should throw DoesNotExist Exception
         self.assertRaises(
             Workspace.DoesNotExist,
-            Workspace.objects.get, uuid=workspace.uuid
+            Workspace.objects.get,
+            uuid=workspace.uuid
         )
         # or checking if the deleted item exists should be false
         self.assertFalse(Workspace.objects.filter(uuid=workspace.uuid).exists())
 
-    def test_get_hikaya_user_details(self):
+    def test_get_workspace_details(self):
         self.client.force_authenticate(self.user)
         workspace_data = {'name': 'Workspace 1'}
         workspace = Workspace.objects.create(**workspace_data)

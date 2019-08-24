@@ -29,6 +29,22 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
+class DocumentSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Document Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='document-detail',
+        lookup_field='document_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Document
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
 class WorkspaceSerializer(serializers.HyperlinkedModelSerializer):
     """
     Workspace Serializer
