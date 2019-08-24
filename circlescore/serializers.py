@@ -77,3 +77,35 @@ class HikayaUserSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_user_object(self, obj):
         return UserSerializer(User.objects.get(pk=obj.user.id)).data
+
+
+class AccountTypeSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    AccountType Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='accounttype-detail',
+        lookup_field='type_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = AccountType
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class AccountSubTypeSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    AccountSubType Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='accountsubtype-detail',
+        lookup_field='sub_type_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = AccountSubType
+        fields = '__all__'
+        extra_fields = ('id',)

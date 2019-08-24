@@ -118,13 +118,9 @@ class AccountType(models.Model):
         return self.type or ''
 
     def save(self, *args, **kwargs):
-        # get logged user
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(AccountType, self).save(*args, **kwargs)
 
 
@@ -154,13 +150,9 @@ class AccountSubType(models.Model):
         return self.type or ''
 
     def save(self, *args, **kwargs):
-        # get logged user
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(AccountSubType, self).save(*args, **kwargs)
 
 

@@ -103,7 +103,7 @@ def auth_login(request):
 
 class DocumentViewSet(viewsets.ModelViewSet):
     """
-    Document Model View
+    Document View
     """
     model = Document
     serializer_class = DocumentSerializer
@@ -135,4 +135,23 @@ class HikayaUserViewSet(viewsets.ModelViewSet):
     lookup_field = 'hikaya_user_uuid'
 
 
+class AccountTypeViewSet(viewsets.ModelViewSet):
+    """
+    AccountType View
+    """
+    model = AccountType
+    serializer_class = AccountTypeSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = AccountType.objects.all()
+    lookup_field = 'type_uuid'
 
+
+class AccountSubTypeViewSet(viewsets.ModelViewSet):
+    """
+    AccountType View
+    """
+    model = AccountSubType
+    serializer_class = AccountSubTypeSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = AccountSubType.objects.all()
+    lookup_field = 'sub_type_uuid'

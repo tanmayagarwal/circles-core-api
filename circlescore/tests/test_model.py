@@ -68,6 +68,9 @@ class WorkspaceModelTest(TestCase):
 
 
 class DocumentModelTest(TestCase):
+    """
+    Document Model
+    """
     def setUp(self):
         self.test_document = {'name': 'Document 1', 'url': 'http://test.com'}
 
@@ -77,3 +80,33 @@ class DocumentModelTest(TestCase):
 
         self.assertEqual(len(Document.objects.all()), 1)
         self.assertEqual(created_document.id, document.id)
+
+
+class AccountTypeModelTest(TestCase):
+    """
+    Test AccountType Model
+    """
+    def setUp(self):
+        self.test_account_type_data = {'type': 'Type 1'}
+
+    def test_document_model_create(self):
+        account_type = AccountType.objects.create(**self.test_account_type_data)
+        created_type = AccountType.objects.get(type='Type 1')
+
+        self.assertEqual(len(AccountType.objects.all()), 1)
+        self.assertEqual(created_type.id, account_type.id)
+
+
+class AccountSubTypeModelTest(TestCase):
+    """
+    Test AccountSubType Model
+    """
+    def setUp(self):
+        self.test_account_type_data = {'sub_type': 'Sub Type 1'}
+
+    def test_document_model_create(self):
+        account_type = AccountSubType.objects.create(**self.test_account_type_data)
+        created_type = AccountSubType.objects.get(sub_type='Sub Type 1')
+
+        self.assertEqual(len(AccountSubType.objects.all()), 1)
+        self.assertEqual(created_type.id, account_type.id)
