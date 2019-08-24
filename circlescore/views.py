@@ -56,41 +56,48 @@ def auth_login(request):
     :param request:
     :return: user payload on success and error on fail
     """
-    if request.method == 'POST':
-        try:
-            username = request.data.get('username', '')
-            password = request.data.get('password', '')
+    try:
+        username = request.data.get('username', '')
+        password = request.data.get('password', '')
 
-            user = User.objects.get(Q(username__iexact=username) | Q(email__iexact=username))
+        user = User.objects.get(Q(username__iexact=username) | Q(email__iexact=username))
 
-            if user.check_password(password):
-                try:
-                    refresh = RefreshToken.for_user(user)
-                    jwt_payload = {
-                        'refresh_token': str(refresh),
-                        'access_token': str(refresh.access_token)
-                    }
+        if user.check_password(password):
+            try:
+                refresh = RefreshToken.for_user(user)
+                jwt_payload = {
+                    'refresh_token': str(refresh),
+                    'access_token': str(refresh.access_token)
+                }
 
-                    user_object = model_to_dict(User.objects.filter(pk=user.id).defer('password').first())
-                    hikaya_user_object = model_to_dict(HikayaUser.objects.get(user_id=user.id))
+                user_object = model_to_dict(User.objects.filter(pk=user.id).first())
+                # remove password field
+                del user_object['password']
+                hikaya_user_object = model_to_dict(HikayaUser.objects.get(user_id=user.id))
 
-                    response_payload = {
-                        'token': jwt_payload,
-                        'user': user_object,
-                        'hikaya_user': hikaya_user_object
-                    }
+                response_payload = {
+                    'token': jwt_payload,
+                    'user': user_object,
+                    'hikaya_user': hikaya_user_object
+                }
 
-                    return Response(response_payload, status=status.HTTP_200_OK)
-                except Exception as e:
-                    raise e
+                return Response(response_payload, status=status.HTTP_200_OK)
+            except Exception as e:
+                raise e
 
-        except User.DoesNotExist:
-            res = {
-                'error': 'User does not exist. Please confirm the details and retry'
-            }
-            return Response(res, status=status.HTTP_403_FORBIDDEN)
+    except User.DoesNotExist:
+        res = {
+            'error': 'User does not exist. Please confirm the details and retry'
+        }
+        return Response(res, status=status.HTTP_403_FORBIDDEN)
 
-    error_message = '{} method not allowed'.format(request.method)
+    except KeyError:
+        res = {
+            'error': 'Please provide both username and password'
+        }
+        return Response(res, status=status.HTTP_403_FORBIDDEN)
+
+    error_message = 'An error occurred. Please verify details and try again'
     return Response({'error': error_message}, status=status.HTTP_403_FORBIDDEN)
 
 
