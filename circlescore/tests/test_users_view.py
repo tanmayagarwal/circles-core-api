@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.test import TestCase
+from django.urls import reverse
 
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, APITestCase
 from rest_framework import status
 
 
-class UserViewTest(TestCase):
+class UserViewTest(APITestCase):
     """
     Test User Endpoint
     post, list, update and delete methods
@@ -68,7 +68,7 @@ class UserViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class GroupViewTest(TestCase):
+class GroupViewTest(APITestCase):
     """
     Test Group
     post, list, edit and delete,
@@ -119,6 +119,24 @@ class GroupViewTest(TestCase):
         self.assertEqual(len(Group.objects.all()), 0)
 
 
-class WorkspaceViewTest(TestCase):
+class UserAuthViewTest(APITestCase):
+    """
+    Test User Login View
+    """
     def setUp(self):
-        pass
+        self.client = APIClient()
+        self.user = get_user_model().objects.create_user(
+            username='test',
+            email='test@email.com',
+            password='test1234',
+            first_name='Joe'
+        )
+
+    def test_user_login_with_username(self):
+        response = self.client.post(
+            reverse('user_login'),
+            {'username': 'test', 'password': 'test1234'}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+

@@ -88,10 +88,10 @@ class Workspace(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = get_request().user
+            # self.created_by = get_request().user
 
         self.edit_date = timezone.now()
-        self.modified_by = get_request().user
+        # self.modified_by = get_request().user
         return super(Workspace, self).save(*args, **kwargs)
 
 
@@ -174,7 +174,7 @@ class Account(models.Model):
         ('active', 'Active'),
         ('inactive', 'Inactive')
     )
-
+    account_uuid = models.UUIDField('Account UUID', editable=False, default=uuid.uuid4, unique=True)
     full_name = models.CharField("Account's Full Name",  max_length=135, blank=True, default='First Account')
     short_name = models.CharField('Account Short Name', max_length=100)
     url = models.CharField("Account's Website URL", max_length=165, blank=True)
@@ -231,6 +231,8 @@ class HikayaUser(models.Model):
     Hikaya Core User Model
     Has a one-to-one relation with the auth user model
     """
+    hikaya_user_uuid = models.UUIDField('Hikaya User UUID', editable=False,
+                                        default=uuid.uuid4, unique=True)
     title = models.CharField(blank=True, null=True,
                              max_length=3, choices=TITLE_CHOICES)
     name = models.CharField('Full Name', blank=True,
@@ -260,9 +262,9 @@ class HikayaUser(models.Model):
     # on save add create date or update edit date
     def save(self, *args, **kwargs):
         if self.create_date is None:
-            self.create_date = datetime.now()
+            self.create_date = timezone.now()
             self.name = '{} {}'.format(self.user.first_name, self.user.last_name)
-        self.edit_date = datetime.now()
+        self.edit_date = timezone.now()
         super(HikayaUser, self).save()
 
 
@@ -270,6 +272,7 @@ class Office(models.Model):
     """
     Office Model
     """
+    office_uuid = models.UUIDField('Office UUID', editable=False, default=uuid.uuid4, unique=True)
     name = models.CharField('Office Name', max_length=255, blank=True)
     code = models.CharField('Office Code', max_length=255, blank=True)
     workspace = models.ForeignKey(Workspace, blank=True, null=True, related_name='office_workspace',
@@ -306,6 +309,7 @@ class Sector(models.Model):
     """
     Sector Model
     """
+    sector_uuid = models.UUIDField('Sector UUID', editable=False, default=uuid.uuid4, unique=True)
     sector = models.CharField('Sector Name', max_length=255)
     parent_sector = models.ForeignKey('self', blank=True, null=True, related_name='sub_sectors',
                                       on_delete=models.SET_NULL)
@@ -343,6 +347,7 @@ class Contact(models.Model):
     """
     Contact Model
     """
+    contact_uuid = models.UUIDField('Contact UUID', editable=False, default=uuid.uuid4, unique=True)
     first_name = models.CharField('First Name', max_length=100)
     last_name = models.CharField('Last Name', max_length=100)
     singular_label = models.CharField('Singular Label', max_length=100, default='Contact')
@@ -430,6 +435,8 @@ class AdministrativeLevel(models.Model):
     """
     Administrative IndicatorLevel Model
     """
+    admin_level_uuid = models.UUIDField('Admin Level UUID', editable=False,
+                                        default=uuid.uuid4, unique=True)
     level_1 = models.CharField('Administrative IndicatorLevel 1', max_length=100, blank=True)
     level_2 = models.CharField('Administrative IndicatorLevel 2', max_length=100, blank=True)
     level_3 = models.CharField('Administrative IndicatorLevel 3', max_length=100, blank=True)
@@ -468,6 +475,7 @@ class Country(models.Model):
     """
     Country Model
     """
+    country_uuid = models.UUIDField('Country UUID', editable=False, default=uuid.uuid4, unique=True)
     country = models.CharField('Country Name', max_length=255, blank=True)
     workspace = models.ForeignKey(Workspace, blank=True, null=True, on_delete=models.SET_NULL)
     code = models.CharField('2 Letter Country Code', max_length=4, blank=True)

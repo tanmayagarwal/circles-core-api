@@ -3,29 +3,42 @@ from django.contrib.auth.models import Group
 
 from django.test import TestCase
 
+from circlescore.models import *
+
 
 class UserModelTest(TestCase):
+    """
+    Test User Model
+    """
     def setUp(self):
         self.test_user_data = {
             'name': 'joedoe',
             'email': 'joedoe@circles.io',
-            'password': 'joedoe1234'
+            'password': 'joedoe1234',
+            'first_name': 'Joe',
+            'last_name': 'Doe'
         }
 
     def test_user_model_create(self):
-        """
-        Test User Model
-        Create a user
-        :return:
-        """
-        user = get_user_model()(username='test', email='test@test.com', password='test')
+        user = get_user_model()(
+            username='test',
+            email='test@test.com',
+            password='test',
+            first_name='Joe',
+            last_name='Doe')
         user.save()
         created_user = get_user_model().objects.get(username='test')
 
         self.assertEqual(created_user.email, 'test@test.com')
+        # Test if HikayaUser is created
+        hikaya_user = HikayaUser.objects.get(user_id=created_user.id)
+        self.assertEqual(hikaya_user.name, 'Joe Doe')
 
 
 class GroupModelTest(TestCase):
+    """
+    Test Group Model
+    """
     def setUp(self):
         self.test_group = {
             'name': 'Group 1'
@@ -37,3 +50,20 @@ class GroupModelTest(TestCase):
 
         self.assertEqual(len(Group.objects.all()), 1)
         self.assertEqual(created_group.id, group.id)
+
+
+class WorkspaceModelTest(TestCase):
+    """
+    Test  Workspace Model
+    """
+    def setUp(self):
+        self.test_workspace = {'name': 'Workspace'}
+
+    def test_workspace_model_create(self):
+        workspace = Workspace.objects.create(**self.test_workspace)
+        created_workspace = Workspace.objects.get(name='Workspace')
+
+        self.assertEqual(len(Workspace.objects.all()), 1)
+        self.assertEqual(created_workspace.id, workspace.id)
+
+
