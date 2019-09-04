@@ -63,7 +63,7 @@ class AccountTypeTest(APITestCase):
         self.assertRaises(
             AccountSubType.DoesNotExist,
             AccountSubType.objects.get,
-            sub_type_uuid=account_sub_type.type_uuid
+            sub_type_uuid=account_sub_type.sub_type_uuid
         )
 
     def test_get_account_sub_type_detail(self):

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'guardian',
     'rest_framework_swagger',
     'circlescore',
+    'django_nose',
 ]
 
 MIDDLEWARE = [
