@@ -66,7 +66,7 @@ class AccountTypeTest(APITestCase):
             type_uuid=account_type.type_uuid
         )
 
-    def test_get_account_type_detail(self):
+    def test_retrieve_account_type(self):
         self.client.force_authenticate(self.user)
 
         account_type = AccountType.objects.create(type='Type 1')

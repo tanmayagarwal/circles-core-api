@@ -8,16 +8,10 @@ from circlescore.models import *
 
 class UserModelTest(TestCase):
     """
-    Test User Model
+    Test User & HikayaUser Model
     """
     def setUp(self):
-        self.test_user_data = {
-            'name': 'joedoe',
-            'email': 'joedoe@circles.io',
-            'password': 'joedoe1234',
-            'first_name': 'Joe',
-            'last_name': 'Doe'
-        }
+        pass
 
     def test_user_model_create(self):
         user = get_user_model()(
@@ -110,3 +104,32 @@ class AccountSubTypeModelTest(TestCase):
 
         self.assertEqual(len(AccountSubType.objects.all()), 1)
         self.assertEqual(created_type.id, account_type.id)
+
+
+class ContactModelTest(TestCase):
+    """
+    Contact Model Test
+    """
+    def setUp(self):
+        self.contact = Contact.objects.create(
+            first_name='Test',
+            last_name='Test2',
+            email='test@hikaya.io'
+        )
+
+    def test_contact_model_create(self):
+        contact = Contact.objects.get(first_name='Test')
+
+        self.assertEqual(contact.email, 'test@hikaya.io')
+
+
+class LocationModelTest(TestCase):
+    """
+    Location Model Test
+    """
+    def setUp(self):
+        self.location = Location.objects.create(name='Test Location')
+
+    def test_location_model_create(self):
+        location = Location.objects.get(name='Test Location')
+        self.assertIsNotNone(location)

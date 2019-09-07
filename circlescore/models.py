@@ -201,12 +201,9 @@ class Account(models.Model):
 
     # on save add create date or update edit date
     def save(self, *args, **kwargs):
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(Account, self).save(*args, **kwargs)
 
 
@@ -282,12 +279,9 @@ class Office(models.Model):
 
     # on save add create date or update edit date
     def save(self, *args, **kwargs):
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if self.create_date is None:
             self.create_date = datetime.now()
-            self.created_by = logged_user
         self.edit_date = datetime.now()
-        self.modified_by = logged_user
         super(Office, self).save(*args, **kwargs)
 
     # displayed in admin templates
@@ -304,8 +298,6 @@ class Sector(models.Model):
     sector = models.CharField('Sector Name', max_length=255)
     parent_sector = models.ForeignKey('self', blank=True, null=True, related_name='sub_sectors',
                                       on_delete=models.SET_NULL)
-    workspace = models.ForeignKey(Workspace, blank=True, null=True, related_name='sector_workspace',
-                                  on_delete=models.SET_NULL)
     account = models.ForeignKey(Account, blank=True, null=True, on_delete=models.SET_NULL,
                                 related_name='sector_account')
     create_date = models.DateTimeField('Create Date', null=True, blank=True)
@@ -325,12 +317,9 @@ class Sector(models.Model):
 
     # on save add create date or update edit date
     def save(self, *args, **kwargs):
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(Sector, self).save(*args, **kwargs)
 
 
@@ -340,18 +329,16 @@ class Contact(models.Model):
     """
     contact_uuid = models.UUIDField('Contact UUID', editable=False, default=uuid.uuid4, unique=True)
     first_name = models.CharField('First Name', max_length=100)
-    last_name = models.CharField('Last Name', max_length=100)
+    last_name = models.CharField('Last Name', max_length=100, blank=True, null=True)
     singular_label = models.CharField('Singular Label', max_length=100, default='Contact')
     plural_label = models.CharField('Plural Label', max_length=100, default='Contacts')
     email = models.CharField('Email Address', max_length=100, blank=True, null=True)
     phone = models.CharField('Phone Number', max_length=25, blank=True, null=True)
-    street = models.CharField('City', max_length=100, blank=True)
-    city = models.CharField('City', max_length=100, blank=True)
-    zip_code = models.CharField('Zip/Postal Code', max_length=25, blank=True)
-    state = models.CharField('State/Province', max_length=100, blank=True)
-    country = models.CharField('Country', max_length=100, blank=True)
-    workspace = models.ForeignKey(Workspace, blank=True, null=True,
-                                  related_name='contact_workspace', on_delete=models.SET_NULL)
+    street = models.CharField('City', max_length=100, null=True, blank=True)
+    city = models.CharField('City', max_length=100, null=True, blank=True)
+    zip_code = models.CharField('Zip/Postal Code', max_length=25, null=True, blank=True)
+    state = models.CharField('State/Province', max_length=100, null=True, blank=True)
+    country = models.CharField('Country', max_length=100, null=True, blank=True)
     account = models.ForeignKey(Account, blank=True, null=True, on_delete=models.SET_NULL,
                                 related_name='contact_account')
     create_date = models.DateTimeField('Create Date', null=True, blank=True)
@@ -376,12 +363,9 @@ class Contact(models.Model):
 
     # on save add create date or update edit date
     def save(self, *args, **kwargs):
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(Contact, self).save(*args, **kwargs)
 
 
@@ -413,12 +397,9 @@ class LocationType(models.Model):
 
     def save(self, *args, **kwargs):
         # get logged user
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(LocationType, self).save(*args, **kwargs)
 
 
@@ -453,12 +434,9 @@ class AdministrativeLevel(models.Model):
 
     # on save add create date or update edit date
     def save(self, *args, **kwargs):
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(AdministrativeLevel, self).save(*args, **kwargs)
 
 
@@ -505,24 +483,22 @@ class Location(models.Model):
         ('inactive', 'Inactive')
     )
     location_uuid = models.UUIDField('Location UUID', editable=False, default=uuid.uuid4, unique=True)
-    name = models.CharField('Site Name', max_length=100, blank=True)
-    parent_location = models.ForeignKey('self', null=True, related_name='sub_locations', on_delete=models.SET_NULL)
-    contact = models.ForeignKey(Contact, null=True, verbose_name='Location Contact', on_delete=models.SET_NULL)
+    name = models.CharField('Site Name', max_length=100)
+    parent_location = models.ForeignKey('self', null=True, blank=True, related_name='sub_locations', on_delete=models.SET_NULL)
+    contact = models.ForeignKey(Contact, null=True, blank=True, verbose_name='Location Contact', on_delete=models.SET_NULL)
     status = models.CharField('Location Status', blank=True, max_length=100, choices=STATUS_CHOICES, default='active')
-    country = models.ForeignKey(Country, verbose_name='Country of Location', on_delete=models.CASCADE)
-    office = models.ForeignKey(Office, null=True, verbose_name='Location Office', on_delete=models.SET_NULL)
-    type = models.ForeignKey(LocationType, null=True, verbose_name='Location Type', on_delete=models.SET_NULL)
-    admin_levels = models.ForeignKey(AdministrativeLevel, verbose_name='Administrative Levels', null=True,
+    country = models.ForeignKey(Country, verbose_name='Country of Location', null=True, blank=True, on_delete=models.CASCADE)
+    office = models.ForeignKey(Office, null=True, blank=True, verbose_name='Location Office', on_delete=models.SET_NULL)
+    type = models.ForeignKey(LocationType, null=True, blank=True, verbose_name='Location Type', on_delete=models.SET_NULL)
+    admin_level = models.ForeignKey(AdministrativeLevel, verbose_name='Administrative Levels', null=True, blank=True,
                                      on_delete=models.SET_NULL)
     latitude = models.DecimalField('Latitude Coordinates', decimal_places=16, max_digits=25, default=Decimal('0.00'))
     longitude = models.DecimalField('Longitude Coordinates', decimal_places=16, max_digits=25, default=Decimal('0.00'))
     workspace = models.ForeignKey(Workspace, blank=True, null=True, related_name='location_workspace',
                                   on_delete=models.SET_NULL)
-    account = models.ForeignKey(Account, blank=True, null=True, on_delete=models.SET_NULL,
-                                related_name='location_account')
     create_date = models.DateTimeField('Create Date', null=True, blank=True)
     modified_date = models.DateTimeField('Modified Date', null=True, blank=True)
-    created_by = models.ForeignKey(HikayaUser, verbose_name='Created by', editable=False, null=True,
+    created_by = models.ForeignKey(HikayaUser, verbose_name='Created by', blank=True, editable=False, null=True,
                                    related_name='location_created_by', on_delete=models.SET_NULL)
     modified_by = models.ForeignKey(HikayaUser, verbose_name='Modified By', editable=False, null=True,
                                     related_name='location_modified_by', on_delete=models.SET_NULL)
@@ -537,12 +513,9 @@ class Location(models.Model):
 
     # on save add create date or update edit date
     def save(self, *args, **kwargs):
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(Location, self).save(*args, **kwargs)
 
 
@@ -607,12 +580,9 @@ class Currency(models.Model):
 
     def save(self, *args, **kwargs):
         # get logged user
-        logged_user = HikayaUser.objects.get(user=get_request().user)
         if not self.id:
             self.create_date = timezone.now()
-            self.created_by = logged_user
         self.modified_date = timezone.now()
-        self.modified_by = logged_user
         return super(Currency, self).save(*args, **kwargs)
 
     def __str__(self):

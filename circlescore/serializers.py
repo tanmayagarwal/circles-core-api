@@ -109,3 +109,35 @@ class AccountSubTypeSerializer(serializers.HyperlinkedModelSerializer):
         model = AccountSubType
         fields = '__all__'
         extra_fields = ('id',)
+
+
+class ContactSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Contact Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='contact-detail',
+        lookup_field='contact_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Contact
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class LocationSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Location Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='location-detail',
+        lookup_field='location_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Location
+        fields = '__all__'
+        extra_fields = ('id',)

@@ -155,3 +155,26 @@ class AccountSubTypeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = AccountSubType.objects.all()
     lookup_field = 'sub_type_uuid'
+
+
+class ContactViewSet(viewsets.ModelViewSet):
+    """
+    Contact View
+    """
+    model = Contact
+    serializer_class = ContactSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = Contact.objects.all()
+    lookup_field = 'contact_uuid'
+
+
+class LocationViewSet(viewsets.ModelViewSet):
+    """
+    Location View
+    """
+    model = Location
+    serializer_class = LocationSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = Location.objects.all()
+    lookup_field = 'location_uuid'
+
