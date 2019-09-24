@@ -35,7 +35,8 @@ class UserViewTest(APITestCase):
 
     def test_update_user_authenticated(self):
         self.client.force_authenticate(self.user)
-        test_user = get_user_model().objects.create_user(**self.test_user_data)
+        test_user = get_user_model().objects.create_user(
+            **self.test_user_data)
         response = self.client.patch(
             '/api/v1/user/{}/'.format(test_user.id),
             {'username': 'johndoe'}
@@ -46,7 +47,8 @@ class UserViewTest(APITestCase):
         self.assertEqual(updated_user.id, test_user.id)
 
     def test_update_user_unauthenticated(self):
-        test_user = get_user_model().objects.create_user(**self.test_user_data)
+        test_user = get_user_model().objects.create_user(
+            **self.test_user_data)
         response = self.client.patch(
             '/api/v1/user/{}/'.format(test_user.id),
             {'username': 'johndoe'}
@@ -113,7 +115,8 @@ class GroupViewTest(APITestCase):
 
     def test_test_delete_group(self):
         group = Group.objects.create(name='Test2')
-        response = self.client.delete('/api/v1/group/{}/'.format(group.id))
+        response = self.client.delete(
+            '/api/v1/group/{}/'.format(group.id))
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(len(Group.objects.all()), 0)

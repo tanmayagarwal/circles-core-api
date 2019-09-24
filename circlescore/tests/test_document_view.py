@@ -22,7 +22,10 @@ class DocumentViewTest(APITestCase):
 
     def test_post_document(self):
         self.client.force_authenticate(self.user)
-        test_document_data = {'name': 'test doc', 'url': 'http://test.io'}
+        test_document_data = {
+            'name': 'test doc',
+            'url': 'http://test.io'
+        }
         response = self.client.post(
             reverse('document-list'),
             test_document_data,
@@ -34,21 +37,31 @@ class DocumentViewTest(APITestCase):
     def test_put_document(self):
         self.client.force_authenticate(self.user)
 
-        test_document_data = {'name': 'test doc', 'url': 'http://test.io'}
+        test_document_data = {
+            'name': 'test doc',
+            'url': 'http://test.io'
+        }
         document = Document.objects.create(**test_document_data)
         response = self.client.put(
-            reverse('document-detail', kwargs={'document_uuid': document.document_uuid}),
+            reverse(
+                'document-detail',
+                kwargs={'document_uuid': document.document_uuid}
+            ),
             {'name': 'edited doc'},
             format='json'
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['document_uuid'], str(document.document_uuid))
+        self.assertEqual(response.data['document_uuid'],
+                         str(document.document_uuid))
 
     def test_list_documents(self):
         self.client.force_authenticate(self.user)
 
-        test_document_data = {'name': 'test doc', 'url': 'http://test.io'}
+        test_document_data = {
+            'name': 'test doc',
+            'url': 'http://test.io'
+        }
         Document.objects.create(**test_document_data)
         response = self.client.get(reverse('document-list'))
 
@@ -58,10 +71,16 @@ class DocumentViewTest(APITestCase):
     def test_delete_document(self):
         self.client.force_authenticate(self.user)
 
-        test_document_data = {'name': 'test doc', 'url': 'http://test.io'}
+        test_document_data = {
+            'name': 'test doc',
+            'url': 'http://test.io'
+        }
         document = Document.objects.create(**test_document_data)
         response = self.client.delete(
-            reverse('document-detail', kwargs={'document_uuid': document.document_uuid})
+            reverse(
+                'document-detail',
+                kwargs={'document_uuid': document.document_uuid}
+            )
         )
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -74,10 +93,16 @@ class DocumentViewTest(APITestCase):
     def test_get_document_details(self):
         self.client.force_authenticate(self.user)
 
-        test_document_data = {'name': 'test doc', 'url': 'http://test.io'}
+        test_document_data = {
+            'name': 'test doc',
+            'url': 'http://test.io'
+        }
         document = Document.objects.create(**test_document_data)
         response = self.client.get(
-            reverse('document-detail', kwargs={'document_uuid': document.document_uuid})
+            reverse(
+                'document-detail',
+                kwargs={'document_uuid': document.document_uuid}
+            )
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

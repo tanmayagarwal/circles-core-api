@@ -2,7 +2,11 @@ from django.contrib.auth.models import User, Group
 
 from rest_framework import serializers
 
-from .models import *
+# models
+from .models import (
+    HikayaUser, Workspace, AccountType, AccountSubType,
+    Location, Contact, Document, Office, Currency
+)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,7 +17,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('email', 'first_name', 'last_name', 'username')
         write_only_fields = ('password',)
-        read_only_fields = ('is_staff', 'is_superuser', 'is_active', 'date_joined',)
+        read_only_fields = (
+            'is_staff', 'is_superuser', 'is_active', 'date_joined',
+        )
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
@@ -56,7 +62,9 @@ class WorkspaceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Workspace
-        exclude = ('create_date', 'modified_date', 'created_by', 'modified_by')
+        exclude = (
+            'create_date', 'modified_date', 'created_by', 'modified_by'
+        )
 
 
 class HikayaUserSerializer(serializers.HyperlinkedModelSerializer):
@@ -76,7 +84,9 @@ class HikayaUserSerializer(serializers.HyperlinkedModelSerializer):
         extra_fields = ('id',)
 
     def get_user_object(self, obj):
-        return UserSerializer(User.objects.get(pk=obj.user.id)).data
+        return UserSerializer(
+            User.objects.get(pk=obj.user.id)
+        ).data
 
 
 class AccountTypeSerializer(serializers.HyperlinkedModelSerializer):
@@ -139,5 +149,37 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Location
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class OfficeSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Office Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='office-detail',
+        lookup_field='office_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Office
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class CurrencySerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Currency Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='currency-detail',
+        lookup_field='currency_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Currency
         fields = '__all__'
         extra_fields = ('id',)

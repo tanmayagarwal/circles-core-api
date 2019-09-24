@@ -1,16 +1,30 @@
 from django.db.models import Q
 from django.forms.models import model_to_dict
+from django.contrib.auth.models import Group, User
 
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import (
+    AllowAny, IsAuthenticated)
+from rest_framework.decorators import (
+    api_view, permission_classes,)
 from rest_framework.response import Response
 from rest_framework import status
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import *
-from .models import *
+# serializers
+from .serializers import (
+    UserSerializer, AccountSubTypeSerializer, AccountTypeSerializer,
+    GroupSerializer, LocationSerializer, HikayaUserSerializer,
+    ContactSerializer, WorkspaceSerializer, DocumentSerializer,
+    OfficeSerializer, CurrencySerializer,
+)
+
+# models
+from .models import (
+    HikayaUser, Workspace, AccountType, AccountSubType,
+    Location, Contact, Document, Office, Currency,
+)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -60,7 +74,10 @@ def auth_login(request):
         username = request.data.get('username', '')
         password = request.data.get('password', '')
 
-        user = User.objects.get(Q(username__iexact=username) | Q(email__iexact=username))
+        user = User.objects.get(
+            Q(username__iexact=username) |
+            Q(email__iexact=username)
+        )
 
         if user.check_password(password):
             try:
@@ -70,10 +87,13 @@ def auth_login(request):
                     'access_token': str(refresh.access_token)
                 }
 
-                user_object = model_to_dict(User.objects.filter(pk=user.id).first())
+                user_object = model_to_dict(
+                    User.objects.filter(pk=user.id).first()
+                )
                 # remove password field
                 del user_object['password']
-                hikaya_user_object = model_to_dict(HikayaUser.objects.get(user_id=user.id))
+                hikaya_user_object = model_to_dict(
+                    HikayaUser.objects.get(user_id=user.id))
 
                 response_payload = {
                     'token': jwt_payload,
@@ -81,13 +101,17 @@ def auth_login(request):
                     'hikaya_user': hikaya_user_object
                 }
 
-                return Response(response_payload, status=status.HTTP_200_OK)
+                return Response(
+                    response_payload,
+                    status=status.HTTP_200_OK
+                )
             except Exception as e:
                 raise e
 
     except User.DoesNotExist:
         res = {
-            'error': 'User does not exist. Please confirm the details and retry'
+            'error': 'User does not exist. '
+                     'Please confirm the details and retry'
         }
         return Response(res, status=status.HTTP_403_FORBIDDEN)
 
@@ -97,8 +121,12 @@ def auth_login(request):
         }
         return Response(res, status=status.HTTP_403_FORBIDDEN)
 
-    error_message = 'An error occurred. Please verify details and try again'
-    return Response({'error': error_message}, status=status.HTTP_403_FORBIDDEN)
+    error_message = 'An error occurred. ' \
+                    'Please verify details and try again'
+    return Response(
+        {'error': error_message},
+        status=status.HTTP_403_FORBIDDEN
+    )
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
@@ -178,3 +206,24 @@ class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()
     lookup_field = 'location_uuid'
 
+
+class OfficeViewSet(viewsets.ModelViewSet):
+    """
+    Office ViewSet
+    """
+    model = Office
+    serializer_class = OfficeSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = Office.objects.all()
+    lookup_field = 'office_uuid'
+
+
+class CurrencyViewSet(viewsets.ModelViewSet):
+    """
+    Currency ViewSet
+    """
+    model = Currency
+    serializer_class = CurrencySerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = Currency.objects.all()
+    lookup_field = 'currency_uuid'

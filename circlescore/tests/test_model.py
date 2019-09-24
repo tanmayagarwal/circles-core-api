@@ -66,7 +66,10 @@ class DocumentModelTest(TestCase):
     Document Model
     """
     def setUp(self):
-        self.test_document = {'name': 'Document 1', 'url': 'http://test.com'}
+        self.test_document = {
+            'name': 'Document 1',
+            'url': 'http://test.com'
+        }
 
     def test_document_model_create(self):
         document = Document.objects.create(**self.test_document)
@@ -84,7 +87,8 @@ class AccountTypeModelTest(TestCase):
         self.test_account_type_data = {'type': 'Type 1'}
 
     def test_document_model_create(self):
-        account_type = AccountType.objects.create(**self.test_account_type_data)
+        account_type = AccountType.objects.create(
+            **self.test_account_type_data)
         created_type = AccountType.objects.get(type='Type 1')
 
         self.assertEqual(len(AccountType.objects.all()), 1)
@@ -99,7 +103,8 @@ class AccountSubTypeModelTest(TestCase):
         self.test_account_type_data = {'sub_type': 'Sub Type 1'}
 
     def test_document_model_create(self):
-        account_type = AccountSubType.objects.create(**self.test_account_type_data)
+        account_type = AccountSubType.objects.create(
+            **self.test_account_type_data)
         created_type = AccountSubType.objects.get(sub_type='Sub Type 1')
 
         self.assertEqual(len(AccountSubType.objects.all()), 1)
@@ -133,3 +138,30 @@ class LocationModelTest(TestCase):
     def test_location_model_create(self):
         location = Location.objects.get(name='Test Location')
         self.assertIsNotNone(location)
+
+
+class OfficeModelTest(TestCase):
+    """
+    Office Model Test
+    """
+    def setUp(self):
+        self.office = Office.objects.create(name='Test Office')
+
+    def test_office_model_create(self):
+        office = Office.objects.get(name='Test Office')
+        self.assertIsNotNone(office)
+
+
+class CurrencyModelTest(TestCase):
+    """
+    Currency Model Test
+    """
+    def setUp(self):
+        self.currency = Currency.objects.create(
+            name='Kenya Shillings',
+            symbol='KES'
+        )
+
+    def test_currency_model_create(self):
+        currency = Currency.objects.get(symbol='KES')
+        self.assertIsNotNone(currency)

@@ -67,10 +67,13 @@ class LocationViewTest(APITestCase):
         self.client.force_authenticate(self.user)
         location = Location.objects.create(name='London2')
         response = self.client.delete(reverse(
-            'location-detail', kwargs={'location_uuid': location.location_uuid})
+            'location-detail',
+            kwargs={'location_uuid': location.location_uuid}
+        )
         )
 
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code,
+                         status.HTTP_204_NO_CONTENT)
         self.assertRaises(
             Location.DoesNotExist,
             Location.objects.get,

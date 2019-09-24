@@ -34,7 +34,10 @@ class AccountTypeTest(APITestCase):
 
         account_type = AccountType.objects.create(type='Type 1')
         response = self.client.put(
-            reverse('accounttype-detail', kwargs={'type_uuid': account_type.type_uuid}),
+            reverse(
+                'accounttype-detail',
+                kwargs={'type_uuid': account_type.type_uuid}
+            ),
             {'type': 'Type Updated'},
             format='json'
         )
@@ -56,7 +59,10 @@ class AccountTypeTest(APITestCase):
 
         account_type = AccountType.objects.create(type='Type 1')
         response = self.client.delete(
-            reverse('accounttype-detail', kwargs={'type_uuid': account_type.type_uuid})
+            reverse(
+                'accounttype-detail',
+                kwargs={'type_uuid': account_type.type_uuid}
+            )
         )
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -71,7 +77,10 @@ class AccountTypeTest(APITestCase):
 
         account_type = AccountType.objects.create(type='Type 1')
         response = self.client.get(
-            reverse('accounttype-detail', kwargs={'type_uuid': account_type.type_uuid})
+            reverse(
+                'accounttype-detail',
+                kwargs={'type_uuid': account_type.type_uuid}
+            )
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

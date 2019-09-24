@@ -28,7 +28,10 @@ class ContactViewTest(APITestCase):
             'email': 'email@hikaya.io'
         }
 
-        response = self.client.post(reverse('contact-list'), contact_data, format='json')
+        response = self.client.post(
+            reverse(
+                'contact-list'), contact_data, format='json'
+        )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 

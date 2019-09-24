@@ -28,7 +28,9 @@ class HikayaUserViewTest(APITestCase):
 
         hikaya_user_data['name'] = 'Joe Joe'
         hikaya_user_data['hikaya_user_uuid'] = uuid
-        hikaya_user_data['user'] = reverse('user-detail', kwargs={'pk': self.user.id})
+        hikaya_user_data['user'] = reverse(
+            'user-detail', kwargs={'pk': self.user.id}
+        )
         response = self.client.put(
             reverse(
                 'hikayauser-detail',
