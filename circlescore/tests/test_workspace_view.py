@@ -58,7 +58,9 @@ class WorkspaceViewTest(APITestCase):
         workspace =Workspace.objects.create(**workspace_data)
 
         response = self.client.delete(
-            reverse('workspace-detail', kwargs={'uuid': workspace.uuid})
+            reverse(
+                'workspace-detail',
+                kwargs={'uuid': workspace.uuid})
         )
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -69,7 +71,8 @@ class WorkspaceViewTest(APITestCase):
             uuid=workspace.uuid
         )
         # or checking if the deleted item exists should be false
-        self.assertFalse(Workspace.objects.filter(uuid=workspace.uuid).exists())
+        self.assertFalse(Workspace.objects.filter(
+            uuid=workspace.uuid).exists())
 
     def test_get_workspace_details(self):
         self.client.force_authenticate(self.user)

@@ -12,6 +12,10 @@ router.register(r'workspace', WorkspaceViewSet)
 router.register(r'hikayauser', HikayaUserViewSet)
 router.register(r'accounttype', AccountTypeViewSet)
 router.register(r'accountsubtype', AccountSubTypeViewSet)
+router.register(r'contact', ContactViewSet)
+router.register(r'location', LocationViewSet)
+router.register(r'office', OfficeViewSet)
+router.register(r'currency', CurrencyViewSet)
 
 urlpatterns = router.urls
 urlpatterns += [

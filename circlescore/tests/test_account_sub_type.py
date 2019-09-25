@@ -34,7 +34,10 @@ class AccountTypeTest(APITestCase):
 
         sub_type = AccountSubType.objects.create(sub_type='Sub Type 1')
         response = self.client.put(
-            reverse('accountsubtype-detail', kwargs={'sub_type_uuid': str(sub_type.sub_type_uuid)}),
+            reverse(
+                'accountsubtype-detail',
+                kwargs={'sub_type_uuid': str(sub_type.sub_type_uuid)}
+            ),
             {'sub_type': 'Sub Type Updated'},
             format='json'
         )
@@ -56,7 +59,10 @@ class AccountTypeTest(APITestCase):
 
         account_sub_type = AccountSubType.objects.create(sub_type='Sub Type 1')
         response = self.client.delete(
-            reverse('accountsubtype-detail', kwargs={'sub_type_uuid': str(account_sub_type.sub_type_uuid)})
+            reverse(
+                'accountsubtype-detail',
+                kwargs={'sub_type_uuid': str(account_sub_type.sub_type_uuid)}
+            )
         )
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -71,7 +77,10 @@ class AccountTypeTest(APITestCase):
 
         account_type = AccountSubType.objects.create(sub_type='Sub Type 1')
         response = self.client.get(
-            reverse('accountsubtype-detail', kwargs={'sub_type_uuid': str(account_type.sub_type_uuid)})
+            reverse(
+                'accountsubtype-detail',
+                kwargs={'sub_type_uuid': str(account_type.sub_type_uuid)}
+            )
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
