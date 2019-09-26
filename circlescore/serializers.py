@@ -6,7 +6,8 @@ from rest_framework import serializers
 from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
     Location, Contact, Document, Office, Currency, LocationType,
-    FundingStatus, WorkflowStatus,
+    FundingStatus, WorkflowStatus, WorkflowLevel1Type, WorkflowLevel2Type,
+    WorkflowLevel2Plan,
 )
 
 
@@ -224,7 +225,6 @@ class WorkflowStatusSerializer(serializers.HyperlinkedModelSerializer):
     WorkflowStatus Serializer
     """
     url = serializers.HyperlinkedIdentityField(
-
         view_name='workflowstatus-detail',
         lookup_field='status_uuid'
     )
@@ -232,5 +232,35 @@ class WorkflowStatusSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = WorkflowStatus
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class WorkflowLevel1TypeSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    WorkflowLevel1Type Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='workflowlevel1type-detail',
+        lookup_field='type_uuid')
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = WorkflowLevel1Type
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class WorkflowLevel2TypeSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    WorkflowLevel2Type Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='workflowlevel2type-detail',
+        lookup_field='type_uuid')
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = WorkflowLevel2Type
         fields = '__all__'
         extra_fields = ('id',)

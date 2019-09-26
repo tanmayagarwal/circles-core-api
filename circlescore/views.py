@@ -19,13 +19,14 @@ from .serializers import (
     ContactSerializer, WorkspaceSerializer, DocumentSerializer,
     OfficeSerializer, CurrencySerializer, LocationTypeSerializer,
     FundingStatusSerializer, WorkflowStatusSerializer,
+    WorkflowLevel1TypeSerializer, WorkflowLevel2TypeSerializer,
 )
 
 # models
 from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
     Location, Contact, Document, Office, Currency, LocationType,
-    FundingStatus, WorkflowStatus,
+    FundingStatus, WorkflowStatus, WorkflowLevel1Type, WorkflowLevel2Type,
 )
 
 
@@ -262,3 +263,25 @@ class WorkflowStatusViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = WorkflowStatus.objects.all()
     lookup_field = 'status_uuid'
+
+
+class WorkflowLevel1TypeViewSet(viewsets.ModelViewSet):
+    """
+    WorkflowLevel1Type ViewSet
+    """
+    model = WorkflowLevel1Type
+    serializer_class = WorkflowLevel1TypeSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = WorkflowLevel1Type.objects.all()
+    lookup_field = 'type_uuid'
+
+
+class WorkflowLevel2TypeViewSet(viewsets.ModelViewSet):
+    """
+    WorkflowLevel2Type ViewSet
+    """
+    model = WorkflowLevel2Type
+    serializer_class = WorkflowLevel2TypeSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = WorkflowLevel2Type.objects.all()
+    lookup_field = 'type_uuid'

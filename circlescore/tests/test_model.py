@@ -204,3 +204,30 @@ class WorkflowStatusModelTest(TestCase):
         workflow_status = WorkflowStatus.objects.get(status='open')
 
         self.assertIsNotNone(workflow_status)
+
+
+class WorkflowLevel1TypeModelTest(TestCase):
+    """
+    WorkflowLevel1Type Model Test
+    """
+    def setUp(self):
+        self.workflow_level1_type = WorkflowLevel1Type.objects.create(type='type1')
+
+    def test_workflow_level1_type_create(self):
+        workflow_level1_type = WorkflowLevel1Type.objects.get(type='type1')
+
+        self.assertIsNotNone(workflow_level1_type)
+
+
+class WorkflowLevel2TypeModelTest(TestCase):
+    """
+    WorkflowLevel2Type Model Test
+    """
+
+    def setUp(self):
+        self.workflow_level2_type = WorkflowLevel2Type.objects.create(type='type1')
+
+    def test_workflow_level2_type_create(self):
+        workflow_level2_type = WorkflowLevel2Type.objects.get(type='type1')
+
+        self.assertIsNotNone(workflow_level2_type)

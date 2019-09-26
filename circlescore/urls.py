@@ -19,6 +19,8 @@ router.register(r'currency', CurrencyViewSet)
 router.register(r'locationtype', LocationTypeViewSet)
 router.register(r'fundingstatus', FundingStatusViewSet)
 router.register(r'workflowstatus', WorkflowStatusViewSet)
+router.register(r'workflowlevel1type', WorkflowLevel1TypeViewSet)
+router.register(r'workflowlevel2type', WorkflowLevel2TypeViewSet)
 
 urlpatterns = router.urls
 urlpatterns += [
