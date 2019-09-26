@@ -231,3 +231,50 @@ class WorkflowLevel2TypeModelTest(TestCase):
         workflow_level2_type = WorkflowLevel2Type.objects.get(type='type1')
 
         self.assertIsNotNone(workflow_level2_type)
+
+
+class WorkflowLevel1ModelTest(TestCase):
+    """
+    WorkflowLevel1 Model Test
+    """
+    def setUp(self):
+        workspace = Workspace.objects.create(name='test')
+        self.workflow_level1 = WorkflowLevel1.objects.create(
+            name='Test 1',
+            workspace=workspace
+        )
+
+    def test_workflow_level1_create(self):
+        workflow_level1 = WorkflowLevel1.objects.get(name='Test 1')
+
+        self.assertIsNotNone(workflow_level1)
+
+
+class WorkflowLevel2ModelTest(TestCase):
+    """
+    WorkflowLevel2 Model Test
+    """
+    def setUp(self):
+        workspace = Workspace.objects.create(name='test')
+        workflow_level1 = WorkflowLevel1.objects.create(
+            name='Test 1',
+            workspace=workspace
+        )
+        self.workflow_level2 = WorkflowLevel2.objects.create(
+            name='Test',
+            workflow_level1=workflow_level1
+        )
+
+    def test_workflow_level2_create(self):
+        workflow_level2 = WorkflowLevel2.objects.get(name='Test')
+
+        self.assertIsNotNone(workflow_level2)
+
+
+# class WorkflowLevel2PlanModelTest(TestCase):
+#     """
+#     WorkflowLevel2Plan Model Test
+#     """
+#     def setUp(self):
+#         wfl1 = WorkflowLevel1.object.create()
+#         self.workflow_level2_plan = WorkflowLevel2Plan.objects.crete()

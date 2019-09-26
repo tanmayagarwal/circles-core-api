@@ -7,7 +7,7 @@ from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
     Location, Contact, Document, Office, Currency, LocationType,
     FundingStatus, WorkflowStatus, WorkflowLevel1Type, WorkflowLevel2Type,
-    WorkflowLevel2Plan,
+    WorkflowLevel1, WorkflowLevel2, WorkflowLevel2Plan,
 )
 
 
@@ -56,7 +56,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
 class WorkspaceSerializer(serializers.HyperlinkedModelSerializer):
     """
     Workspace Serializer
-    """
+    # """
     url = serializers.HyperlinkedIdentityField(
         view_name='workspace-detail',
         lookup_field='uuid'
@@ -67,6 +67,7 @@ class WorkspaceSerializer(serializers.HyperlinkedModelSerializer):
         exclude = (
             'create_date', 'modified_date', 'created_by', 'modified_by'
         )
+        extra_kwargs = {'url': {'lookup_field': 'uuid'}}
 
 
 class HikayaUserSerializer(serializers.HyperlinkedModelSerializer):
@@ -262,5 +263,47 @@ class WorkflowLevel2TypeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = WorkflowLevel2Type
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class WorkflowLevel1Serializer(serializers.HyperlinkedModelSerializer):
+    """
+    WorkflowLevel1 Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='workflowlevel1-detail',
+        lookup_field='workflow_level1_uuid')
+
+    workspace = serializers.HyperlinkedRelatedField(
+        view_name='workspace-detail',
+        lookup_field='uuid',
+        queryset=Workspace.objects.all()
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = WorkflowLevel1
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class WorkflowLevel2Serializer(serializers.HyperlinkedModelSerializer):
+    """
+    WorkflowLevel2 Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='workflowlevel2-detail',
+        lookup_field='workflow_level2_uuid'
+    )
+    workflow_level1 = serializers.HyperlinkedRelatedField(
+        view_name='workflowlevel1-detail',
+        lookup_field='workflow_level1_uuid',
+        queryset=WorkflowLevel1.objects.all()
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = WorkflowLevel2
         fields = '__all__'
         extra_fields = ('id',)

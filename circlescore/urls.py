@@ -21,6 +21,8 @@ router.register(r'fundingstatus', FundingStatusViewSet)
 router.register(r'workflowstatus', WorkflowStatusViewSet)
 router.register(r'workflowlevel1type', WorkflowLevel1TypeViewSet)
 router.register(r'workflowlevel2type', WorkflowLevel2TypeViewSet)
+router.register(r'workflowlevel1', WorkflowLevel1ViewSet)
+router.register(r'workflowlevel2', WorkflowLevel2ViewSet)
 
 urlpatterns = router.urls
 urlpatterns += [

@@ -729,7 +729,7 @@ class FundingStatus(models.Model):
     Tracking Workflow IndicatorLevel 1 funding status
     """
     funding_status_uuid = models.UUIDField(
-        'Funding Status UUID', editable=False, default=uuid.uuid4(), unique=True)
+        'Funding Status UUID', editable=False, default=uuid.uuid4, unique=True)
     status = models.CharField('Funding Status', max_length=165)
     history = HistoricalRecords()
     create_date = models.DateTimeField('Create Date', blank=True, null=True)
@@ -831,19 +831,19 @@ class WorkflowLevel1(models.Model):
     workflow_level1_uuid = models.UUIDField(
         'Workflow Level 1 UUID', editable=False, default=uuid.uuid4, unique=True)
     name = models.CharField(
-        'Workflow Level 1 Name', max_length=255, blank=False)
+        'Workflow Level 1 Name', max_length=255,)
     workflow_level1_code = models.CharField(
-        'Workflow Level 1 Code', max_length=100, blank=True)
+        'Workflow Level 1 Code', max_length=100, blank=True, null=True)
     description = models.TextField(
-        'Workflow Level 1 Description', max_length=765, blank=True)
+        'Workflow Level 1 Description', max_length=765, blank=True, null=True)
     start_date = models.DateTimeField('Start Date', null=True, blank=True)
     end_date = models.DateTimeField('End Date', null=True, blank=True)
     workflow_level1_type = models.ForeignKey(
-        WorkflowLevel1Type, verbose_name='Workflow Level 1 Type', null=True,
+        WorkflowLevel1Type, verbose_name='Workflow Level 1 Type', blank=True, null=True,
         on_delete=models.SET_NULL)
     workflow_status = models.ForeignKey(
         WorkflowStatus, max_length=100, verbose_name='Workflow Status', null=True,
-        on_delete=models.SET_NULL)
+        blank=True,  on_delete=models.SET_NULL)
     sector = models.ManyToManyField(
         Sector, blank=True, help_text='Workflow Level 1 sectors')
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
@@ -851,15 +851,16 @@ class WorkflowLevel1(models.Model):
     portfolio = models.ForeignKey(
         Portfolio, blank=True, null=True, on_delete=models.CASCADE)
     funding_status = models.ForeignKey(
-        FundingStatus, verbose_name='Funding Status', null=True, on_delete=models.SET_NULL)
+        FundingStatus, verbose_name='Funding Status', blank=True, null=True,
+        on_delete=models.SET_NULL)
     history = HistoricalRecords()
     create_date = models.DateTimeField('Create Date', null=True, blank=True, editable=False)
     edit_date = models.DateTimeField('Edit Date', null=True, blank=True)
     created_by = models.ForeignKey(
-        HikayaUser, verbose_name='Created By', editable=False, null=True,
+        HikayaUser, verbose_name='Created By', editable=False, null=True, blank=True,
         related_name='wfl1_created_by', on_delete=models.SET_NULL)
     modified_by = models.ForeignKey(
-        HikayaUser, verbose_name='Modified By', editable=False, null=True,
+        HikayaUser, verbose_name='Modified By', editable=False, null=True, blank=True,
         related_name='wfl1_modified_by', on_delete=models.SET_NULL)
 
     class Meta:
@@ -881,7 +882,7 @@ class Approval(models.Model):
     Approval Model
     """
     approval_uuid = models.UUIDField(
-        'Approval UUID', editable=False, default=uuid.uuid4(), unique=True)
+        'Approval UUID', editable=False, default=uuid.uuid4, unique=True)
     name = models.CharField('Approval Name', max_length=165)
     description = models.TextField(
         'Approval Description', blank=True, max_length=765)
@@ -954,28 +955,30 @@ class WorkflowLevel2(models.Model):
         unique=True)
     name = models.CharField('Workflow IndicatorLevel 2/3 Name', max_length=255)
     description = models.TextField(
-        'Workflow Level 2/3 Description', max_length=765, blank=True)
+        'Workflow Level 2/3 Description', max_length=765, null=True, blank=True)
     workflow_level2_code = models.CharField(
-        'Workflow Level2 Code', blank=True, max_length=100)
+        'Workflow Level2 Code', blank=True, null=True, max_length=100)
     start_date = models.DateTimeField('Start Date', null=True, blank=True)
     end_date = models.DateTimeField('End Date', null=True, blank=True)
     workflow_status = models.ForeignKey(
         WorkflowStatus, max_length=100, verbose_name='Workflow Status', null=True,
-        on_delete=models.SET_NULL)
-    workflow_level1 = models.ForeignKey(
-        WorkflowLevel1, null=False, on_delete=models.CASCADE)
+        blank=True, on_delete=models.SET_NULL)
+    workflow_level1 = models.ForeignKey(WorkflowLevel1, on_delete=models.CASCADE)
     workflow_level2_type = models.ForeignKey(
         WorkflowLevel2Type, verbose_name='Workflow Level 2 Type', null=True,
-        on_delete=models.SET_NULL)
+        blank=True, on_delete=models.SET_NULL)
     parent = models.ForeignKey(
-        'self', null=True, related_name='workflow_level3s', on_delete=models.SET_NULL)
+        'self', null=True, blank=True, related_name='workflow_level3s',
+        on_delete=models.SET_NULL)
     office_location = models.ForeignKey(
-        Office, null=True, verbose_name='Office Location Tag', on_delete=models.SET_NULL)
+        Office, null=True, blank=True, verbose_name='Office Location Tag',
+        on_delete=models.SET_NULL)
     implementation_location = models.ForeignKey(
-        Location, verbose_name='Implementation Location Tag', null=True,
+        Location, verbose_name='Implementation Location Tag', null=True, blank=True,
         on_delete=models.SET_NULL)
     staff_responsible = models.ForeignKey(
-        Contact, verbose_name='Staff Responsible', null=True, on_delete=models.SET_NULL)
+        Contact, verbose_name='Staff Responsible', blank=True, null=True,
+        on_delete=models.SET_NULL)
     workflow_sector = models.ManyToManyField(
         Sector, verbose_name='Workflow Sector Tag', related_name='workflow_sectors',
         blank=True)

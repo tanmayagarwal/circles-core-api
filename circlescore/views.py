@@ -4,9 +4,11 @@ from django.contrib.auth.models import Group, User
 
 from rest_framework import viewsets
 from rest_framework.permissions import (
-    AllowAny, IsAuthenticated)
+    AllowAny, IsAuthenticated
+)
 from rest_framework.decorators import (
-    api_view, permission_classes,)
+    api_view, permission_classes,
+)
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -20,6 +22,7 @@ from .serializers import (
     OfficeSerializer, CurrencySerializer, LocationTypeSerializer,
     FundingStatusSerializer, WorkflowStatusSerializer,
     WorkflowLevel1TypeSerializer, WorkflowLevel2TypeSerializer,
+    WorkflowLevel1Serializer, WorkflowLevel2Serializer,
 )
 
 # models
@@ -27,6 +30,7 @@ from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
     Location, Contact, Document, Office, Currency, LocationType,
     FundingStatus, WorkflowStatus, WorkflowLevel1Type, WorkflowLevel2Type,
+    WorkflowLevel1, WorkflowLevel2,
 )
 
 
@@ -285,3 +289,25 @@ class WorkflowLevel2TypeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = WorkflowLevel2Type.objects.all()
     lookup_field = 'type_uuid'
+
+
+class WorkflowLevel1ViewSet(viewsets.ModelViewSet):
+    """
+    WorkflowLevel1 ViewSet
+    """
+    model = WorkflowLevel1
+    serializer_class = WorkflowLevel1Serializer
+    permission_classes = (IsAuthenticated,)
+    queryset = WorkflowLevel1.objects.all()
+    lookup_field = 'workflow_level1_uuid'
+
+
+class WorkflowLevel2ViewSet(viewsets.ModelViewSet):
+    """
+    WorkflowLevel2 ViewSet
+    """
+    model = WorkflowLevel2
+    serializer_class = WorkflowLevel2Serializer
+    permission_classes = (IsAuthenticated,)
+    queryset = WorkflowLevel2.objects.all()
+    lookup_field = 'workflow_level2_uuid'
