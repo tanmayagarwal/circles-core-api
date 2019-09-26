@@ -17,13 +17,13 @@ from .serializers import (
     UserSerializer, AccountSubTypeSerializer, AccountTypeSerializer,
     GroupSerializer, LocationSerializer, HikayaUserSerializer,
     ContactSerializer, WorkspaceSerializer, DocumentSerializer,
-    OfficeSerializer, CurrencySerializer,
+    OfficeSerializer, CurrencySerializer, LocationTypeSerializer,
 )
 
 # models
 from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
-    Location, Contact, Document, Office, Currency,
+    Location, Contact, Document, Office, Currency, LocationType,
 )
 
 
@@ -227,3 +227,14 @@ class CurrencyViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Currency.objects.all()
     lookup_field = 'currency_uuid'
+
+
+class LocationTypeViewSet(viewsets.ModelViewSet):
+    """
+    LocationType ViewSet
+    """
+    model = LocationType
+    serializer_class = LocationTypeSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = LocationType.objects.all()
+    lookup_field = 'location_type_uuid'

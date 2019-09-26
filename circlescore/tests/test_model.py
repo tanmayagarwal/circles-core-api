@@ -165,3 +165,16 @@ class CurrencyModelTest(TestCase):
     def test_currency_model_create(self):
         currency = Currency.objects.get(symbol='KES')
         self.assertIsNotNone(currency)
+
+
+class LocationTypeModelTest(TestCase):
+    """
+    LocationType Model Test
+    """
+    def setUp(self):
+        self.land_type = LocationType.objects.create(type='Type 1')
+
+    def test_location_type_create(self):
+        land_type = LocationType.objects.get(type='Type 1')
+
+        self.assertIsNotNone(land_type)

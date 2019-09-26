@@ -16,6 +16,7 @@ router.register(r'contact', ContactViewSet)
 router.register(r'location', LocationViewSet)
 router.register(r'office', OfficeViewSet)
 router.register(r'currency', CurrencyViewSet)
+router.register(r'locationtype', LocationTypeViewSet)
 
 urlpatterns = router.urls
 urlpatterns += [

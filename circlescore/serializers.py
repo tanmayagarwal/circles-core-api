@@ -5,7 +5,7 @@ from rest_framework import serializers
 # models
 from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
-    Location, Contact, Document, Office, Currency
+    Location, Contact, Document, Office, Currency, LocationType,
 )
 
 
@@ -181,5 +181,21 @@ class CurrencySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Currency
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class LocationTypeSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    LocationType Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='locationtype-detail',
+        lookup_field='location_type_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = LocationType
         fields = '__all__'
         extra_fields = ('id',)
