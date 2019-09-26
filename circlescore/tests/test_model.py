@@ -178,3 +178,29 @@ class LocationTypeModelTest(TestCase):
         land_type = LocationType.objects.get(type='Type 1')
 
         self.assertIsNotNone(land_type)
+
+
+class FundingStatusModelTest(TestCase):
+    """
+    FundingStatus Model Test
+    """
+    def setUp(self):
+        self.funding_status = FundingStatus.objects.create(status='paid')
+
+    def test_funding_status_create(self):
+        funding_status = FundingStatus.objects.get(status='paid')
+
+        self.assertIsNotNone(funding_status)
+
+
+class WorkflowStatusModelTest(TestCase):
+    """
+    WorkflowStatus Model Test
+    """
+    def setUp(self):
+        self.workflow_status = WorkflowStatus.objects.create(status='open')
+
+    def test_workflow_status_create(self):
+        workflow_status = WorkflowStatus.objects.get(status='open')
+
+        self.assertIsNotNone(workflow_status)

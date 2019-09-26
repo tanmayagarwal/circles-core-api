@@ -17,6 +17,8 @@ router.register(r'location', LocationViewSet)
 router.register(r'office', OfficeViewSet)
 router.register(r'currency', CurrencyViewSet)
 router.register(r'locationtype', LocationTypeViewSet)
+router.register(r'fundingstatus', FundingStatusViewSet)
+router.register(r'workflowstatus', WorkflowStatusViewSet)
 
 urlpatterns = router.urls
 urlpatterns += [

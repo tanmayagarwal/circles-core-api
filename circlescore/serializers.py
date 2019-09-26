@@ -6,6 +6,7 @@ from rest_framework import serializers
 from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
     Location, Contact, Document, Office, Currency, LocationType,
+    FundingStatus, WorkflowStatus,
 )
 
 
@@ -197,5 +198,39 @@ class LocationTypeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = LocationType
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class FundingStatusSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    FundingStatus Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+
+        view_name='fundingstatus-detail',
+        lookup_field='funding_status_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = FundingStatus
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class WorkflowStatusSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    WorkflowStatus Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+
+        view_name='workflowstatus-detail',
+        lookup_field='status_uuid'
+    )
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = WorkflowStatus
         fields = '__all__'
         extra_fields = ('id',)
