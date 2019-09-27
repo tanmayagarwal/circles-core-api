@@ -23,6 +23,7 @@ from .serializers import (
     FundingStatusSerializer, WorkflowStatusSerializer,
     WorkflowLevel1TypeSerializer, WorkflowLevel2TypeSerializer,
     WorkflowLevel1Serializer, WorkflowLevel2Serializer,
+    WorkflowLevel2PlanSerializer,
 )
 
 # models
@@ -30,7 +31,7 @@ from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
     Location, Contact, Document, Office, Currency, LocationType,
     FundingStatus, WorkflowStatus, WorkflowLevel1Type, WorkflowLevel2Type,
-    WorkflowLevel1, WorkflowLevel2,
+    WorkflowLevel1, WorkflowLevel2, WorkflowLevel2Plan,
 )
 
 
@@ -311,3 +312,14 @@ class WorkflowLevel2ViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = WorkflowLevel2.objects.all()
     lookup_field = 'workflow_level2_uuid'
+
+
+class WorkflowLevel2PlanViewSet(viewsets.ModelViewSet):
+    """
+    WorkflowLevel2Plan ViewSet
+    """
+    model = WorkflowLevel2Plan
+    serializer_class = WorkflowLevel2PlanSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = WorkflowLevel2Plan.objects.all()
+    lookup_field = 'workflow_level2_plan_uuid'

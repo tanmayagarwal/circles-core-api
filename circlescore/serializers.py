@@ -307,3 +307,32 @@ class WorkflowLevel2Serializer(serializers.HyperlinkedModelSerializer):
         model = WorkflowLevel2
         fields = '__all__'
         extra_fields = ('id',)
+
+
+class WorkflowLevel2PlanSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    WorkflowLevel2Plan Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='workflowlevel2plan-detail',
+        lookup_field='workflow_level2_plan_uuid'
+    )
+
+    workflow_level1 = serializers.HyperlinkedRelatedField(
+        view_name='workflowlevel1-detail',
+        lookup_field='workflow_level1_uuid',
+        queryset=WorkflowLevel1.objects.all()
+    )
+
+    workflow_level2 = serializers.HyperlinkedRelatedField(
+        view_name='workflowlevel2-detail',
+        lookup_field='workflow_level2_uuid',
+        queryset=WorkflowLevel2.objects.all()
+    )
+
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = WorkflowLevel2Plan
+        fields = '__all__'
+        extra_fields = ('id',)

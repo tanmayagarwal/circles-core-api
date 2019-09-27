@@ -1018,13 +1018,13 @@ class WorkflowLevel2Plan(models.Model):
         unique=True)
     name = models.CharField('Workflow Level2 Plan  Name', max_length=150)
     description = models.TextField(
-        'Workflow Level2 Plan Description', max_length=765, blank=True)
+        'Workflow Level2 Plan Description', max_length=765, null=True, blank=True)
     workflow_level1 = models.ForeignKey(
         WorkflowLevel1, verbose_name='Workflow Level 1',
         on_delete=models.CASCADE)
     workflow_level2 = models.ForeignKey(
-        WorkflowLevel2, verbose_name='Workflow Level 2', null=True,
-        on_delete=models.SET_NULL)
+        WorkflowLevel2, verbose_name='Workflow Level 2',
+        on_delete=models.CASCADE)
     history = HistoricalRecords()
     create_date = models.DateTimeField(
         'Create Date', null=True, blank=True, editable=False)
