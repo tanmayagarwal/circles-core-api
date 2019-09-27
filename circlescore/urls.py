@@ -12,6 +12,7 @@ router.register(r'workspace', WorkspaceViewSet)
 router.register(r'hikayauser', HikayaUserViewSet)
 router.register(r'accounttype', AccountTypeViewSet)
 router.register(r'accountsubtype', AccountSubTypeViewSet)
+router.register(r'account', AccountViewSet)
 router.register(r'contact', ContactViewSet)
 router.register(r'location', LocationViewSet)
 router.register(r'office', OfficeViewSet)
@@ -23,6 +24,7 @@ router.register(r'workflowlevel1type', WorkflowLevel1TypeViewSet)
 router.register(r'workflowlevel2type', WorkflowLevel2TypeViewSet)
 router.register(r'workflowlevel1', WorkflowLevel1ViewSet)
 router.register(r'workflowlevel2', WorkflowLevel2ViewSet)
+router.register(r'workflowlevel2plan', WorkflowLevel2PlanViewSet)
 
 urlpatterns = router.urls
 urlpatterns += [

@@ -7,7 +7,7 @@ from .models import (
     HikayaUser, Workspace, AccountType, AccountSubType,
     Location, Contact, Document, Office, Currency, LocationType,
     FundingStatus, WorkflowStatus, WorkflowLevel1Type, WorkflowLevel2Type,
-    WorkflowLevel1, WorkflowLevel2, WorkflowLevel2Plan,
+    WorkflowLevel1, WorkflowLevel2, WorkflowLevel2Plan, Account,
 )
 
 
@@ -78,7 +78,22 @@ class HikayaUserSerializer(serializers.HyperlinkedModelSerializer):
         view_name='hikayauser-detail',
         lookup_field='hikaya_user_uuid'
     )
+
+    workspaces = serializers.HyperlinkedRelatedField(
+        view_name='workspace-detail',
+        lookup_field='uuid',
+        queryset=Workspace.objects.all(),
+    )
+
+    workspaces = serializers.HyperlinkedRelatedField(
+        view_name='workspace-detail',
+        lookup_field='uuid',
+        queryset=Workspace.objects.all(),
+        many=True,
+    )
+
     id = serializers.ReadOnlyField()
+
     user_object = serializers.SerializerMethodField()
 
     class Meta:
@@ -100,6 +115,14 @@ class AccountTypeSerializer(serializers.HyperlinkedModelSerializer):
         view_name='accounttype-detail',
         lookup_field='type_uuid'
     )
+
+    workspace = serializers.HyperlinkedRelatedField(
+        view_name='workspace-detail',
+        lookup_field='uuid',
+        queryset=Workspace.objects.all(),
+        required=False,
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -116,10 +139,89 @@ class AccountSubTypeSerializer(serializers.HyperlinkedModelSerializer):
         view_name='accountsubtype-detail',
         lookup_field='sub_type_uuid'
     )
+
+    workspace = serializers.HyperlinkedRelatedField(
+        view_name='workspace-detail',
+        lookup_field='uuid',
+        queryset=Workspace.objects.all(),
+        required=False,
+    )
+
+    account_type = serializers.HyperlinkedRelatedField(
+        view_name='accounttype-detail',
+        lookup_field='type_uuid',
+        queryset=AccountType.objects.all(),
+        required=False,
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
         model = AccountSubType
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class AccountSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Account Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='account-detail',
+        lookup_field='account_uuid'
+    )
+
+    account_type = serializers.HyperlinkedRelatedField(
+        view_name='accounttype-detail',
+        lookup_field='type_uuid',
+        queryset=AccountType.objects.all(),
+        required=False,
+    )
+
+    account_sub_type = serializers.HyperlinkedRelatedField(
+        view_name='accountsubtype-detail',
+        lookup_field='sub_type_uuid',
+        queryset=AccountSubType.objects.all(),
+        required=False,
+    )
+
+    workspace = serializers.HyperlinkedRelatedField(
+        view_name='workspace-detail',
+        lookup_field='uuid',
+        queryset=Workspace.objects.all(),
+        required=False,
+    )
+
+    parent_account = serializers.HyperlinkedRelatedField(
+        view_name='account-detail',
+        lookup_field='account_uuid',
+        queryset=Account.objects.all(),
+        required=False,
+    )
+
+    documentation = serializers.HyperlinkedRelatedField(
+        view_name='document-detail',
+        lookup_field='document_uuid',
+        queryset=Document.objects.all(),
+        required=False,
+    )
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Account
         fields = '__all__'
         extra_fields = ('id',)
 
@@ -148,6 +250,19 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
         view_name='location-detail',
         lookup_field='location_uuid'
     )
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -164,6 +279,19 @@ class OfficeSerializer(serializers.HyperlinkedModelSerializer):
         view_name='office-detail',
         lookup_field='office_uuid'
     )
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -229,6 +357,19 @@ class WorkflowStatusSerializer(serializers.HyperlinkedModelSerializer):
         view_name='workflowstatus-detail',
         lookup_field='status_uuid'
     )
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -244,6 +385,19 @@ class WorkflowLevel1TypeSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='workflowlevel1type-detail',
         lookup_field='type_uuid')
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -259,6 +413,19 @@ class WorkflowLevel2TypeSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='workflowlevel2type-detail',
         lookup_field='type_uuid')
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -280,6 +447,19 @@ class WorkflowLevel1Serializer(serializers.HyperlinkedModelSerializer):
         lookup_field='uuid',
         queryset=Workspace.objects.all()
     )
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -301,9 +481,63 @@ class WorkflowLevel2Serializer(serializers.HyperlinkedModelSerializer):
         lookup_field='workflow_level1_uuid',
         queryset=WorkflowLevel1.objects.all()
     )
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
     id = serializers.ReadOnlyField()
 
     class Meta:
         model = WorkflowLevel2
+        fields = '__all__'
+        extra_fields = ('id',)
+
+
+class WorkflowLevel2PlanSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    WorkflowLevel2Plan Serializer
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='workflowlevel2plan-detail',
+        lookup_field='workflow_level2_plan_uuid'
+    )
+
+    workflow_level1 = serializers.HyperlinkedRelatedField(
+        view_name='workflowlevel1-detail',
+        lookup_field='workflow_level1_uuid',
+        queryset=WorkflowLevel1.objects.all(),
+    )
+
+    workflow_level2 = serializers.HyperlinkedRelatedField(
+        view_name='workflowlevel2-detail',
+        lookup_field='workflow_level2_uuid',
+        queryset=WorkflowLevel2.objects.all(),
+    )
+
+    created_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    modified_by = serializers.HyperlinkedRelatedField(
+        view_name='hikayauser-detail',
+        lookup_field='hikaya_user_uuid',
+        read_only=True
+    )
+
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = WorkflowLevel2Plan
         fields = '__all__'
         extra_fields = ('id',)

@@ -111,6 +111,20 @@ class AccountSubTypeModelTest(TestCase):
         self.assertEqual(created_type.id, account_type.id)
 
 
+class AccountMidelTestCase(TestCase):
+    """
+    Test Account Model
+    """
+    def setUp(self):
+        self.test_account = Account.objects.create(
+            full_name='Test Account'
+        )
+
+    def test_account_model_create(self):
+        account = Account.objects.get(full_name='Test Account')
+        self.assertIsNotNone(account)
+
+
 class ContactModelTest(TestCase):
     """
     Contact Model Test
@@ -271,10 +285,29 @@ class WorkflowLevel2ModelTest(TestCase):
         self.assertIsNotNone(workflow_level2)
 
 
-# class WorkflowLevel2PlanModelTest(TestCase):
-#     """
-#     WorkflowLevel2Plan Model Test
-#     """
-#     def setUp(self):
-#         wfl1 = WorkflowLevel1.object.create()
-#         self.workflow_level2_plan = WorkflowLevel2Plan.objects.crete()
+class WorkflowLevel2PlanModelTest(TestCase):
+    """
+    WorkflowLevel2Plan Model Test
+    """
+    def setUp(self):
+        workspace = Workspace.objects.create(name='test')
+        wfl1 = WorkflowLevel1.objects.create(
+            name='Test 2',
+            workspace=workspace
+        )
+        wfl2 = WorkflowLevel2.objects.create(
+            name='Test Project',
+            workflow_level1=wfl1
+        )
+        self.workflow_level2_plan = WorkflowLevel2Plan.objects.create(
+            name='Test Plan',
+            workflow_level1=wfl1,
+            workflow_level2=wfl2
+        )
+
+    def test_workflow_level2_plan(self):
+        workflow_level2_plan = WorkflowLevel2Plan.objects.get(
+            name='Test Plan'
+        )
+        self.assertIsNotNone(workflow_level2_plan)
+

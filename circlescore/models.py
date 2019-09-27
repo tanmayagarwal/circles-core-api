@@ -147,9 +147,9 @@ class AccountSubType(models.Model):
         default=uuid.uuid4, unique=True)
     sub_type = models.CharField(
         'Account Sub-Type', max_length=100, unique=True)
-    type = models.ForeignKey(
+    account_type = models.ForeignKey(
         AccountType, verbose_name='Account Type', null=True,
-        on_delete=models.SET_NULL)
+        blank=True, on_delete=models.SET_NULL)
     workspace = models.ForeignKey(
         Workspace, blank=True, null=True,
         related_name='account_Sub_type_workspace',
@@ -189,22 +189,25 @@ class Account(models.Model):
     STATUS_CHOICES = (('active', 'Active'), ('inactive', 'Inactive'))
     account_uuid = models.UUIDField(
         'Account UUID', editable=False, default=uuid.uuid4, unique=True)
-    full_name = models.CharField(
-        "Account's Full Name", max_length=135, blank=True,
-        default='First Account')
-    short_name = models.CharField('Account Short Name', max_length=100)
-    url = models.CharField("Account's Website URL", max_length=165, blank=True)
+    full_name = models.CharField("Account's Full Name", max_length=135)
+    short_name = models.CharField(
+        'Account Short Name', max_length=100, null=True, blank=True)
+    url = models.CharField(
+        "Account's Website URL", max_length=165, null=True, blank=True)
     description = models.TextField(
         'Description/Notes', max_length=765, null=True, blank=True)
-    organization_type = models.ForeignKey(
+    account_type = models.ForeignKey(
         AccountType, null=True, blank=True, on_delete=models.SET_NULL)
-    parent_organization = models.ForeignKey(
+    account_sub_type = models.ForeignKey(
+        AccountSubType, null=True, blank=True, on_delete=models.SET_NULL)
+    parent_account = models.ForeignKey(
         'self', null=True, blank=True, related_name='children',
         on_delete=models.SET_NULL)
     documentation = models.ForeignKey(
         Document, null=True, blank=True, on_delete=models.SET_NULL)
     link_to_description_relationship = models.CharField(
-        'Link to Description of Relationship', blank=True, max_length=165)
+        'Link to Description of Relationship', null=True, blank=True,
+        max_length=165)
     link_to_due_diligence = models.CharField(
         'Link to Due Diligence', blank=True, max_length=165)
     singular_label = models.CharField(
@@ -215,7 +218,8 @@ class Account(models.Model):
     organization_identifier = models.CharField(
         'Account Identifier', max_length=100, blank=True)
     organization_status = models.CharField(
-        'Account Status', max_length=100, choices=STATUS_CHOICES)
+        'Account Status', max_length=100, default='active',
+        choices=STATUS_CHOICES)
     workspace = models.ForeignKey(
         Workspace, blank=True, null=True, related_name='account_workspace',
         on_delete=models.SET_NULL)
@@ -1018,13 +1022,13 @@ class WorkflowLevel2Plan(models.Model):
         unique=True)
     name = models.CharField('Workflow Level2 Plan  Name', max_length=150)
     description = models.TextField(
-        'Workflow Level2 Plan Description', max_length=765, blank=True)
+        'Workflow Level2 Plan Description', max_length=765, null=True, blank=True)
     workflow_level1 = models.ForeignKey(
         WorkflowLevel1, verbose_name='Workflow Level 1',
         on_delete=models.CASCADE)
     workflow_level2 = models.ForeignKey(
-        WorkflowLevel2, verbose_name='Workflow Level 2', null=True,
-        on_delete=models.SET_NULL)
+        WorkflowLevel2, verbose_name='Workflow Level 2',
+        on_delete=models.CASCADE)
     history = HistoricalRecords()
     create_date = models.DateTimeField(
         'Create Date', null=True, blank=True, editable=False)
