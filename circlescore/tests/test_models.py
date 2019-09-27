@@ -111,6 +111,20 @@ class AccountSubTypeModelTest(TestCase):
         self.assertEqual(created_type.id, account_type.id)
 
 
+class AccountMidelTestCase(TestCase):
+    """
+    Test Account Model
+    """
+    def setUp(self):
+        self.test_account = Account.objects.create(
+            full_name='Test Account'
+        )
+
+    def test_account_model_create(self):
+        account = Account.objects.get(full_name='Test Account')
+        self.assertIsNotNone(account)
+
+
 class ContactModelTest(TestCase):
     """
     Contact Model Test

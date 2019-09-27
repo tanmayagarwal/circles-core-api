@@ -17,7 +17,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 # serializers
 from .serializers import (
     UserSerializer, AccountSubTypeSerializer, AccountTypeSerializer,
-    GroupSerializer, LocationSerializer, HikayaUserSerializer,
+    AccountSerializer, GroupSerializer, LocationSerializer, HikayaUserSerializer,
     ContactSerializer, WorkspaceSerializer, DocumentSerializer,
     OfficeSerializer, CurrencySerializer, LocationTypeSerializer,
     FundingStatusSerializer, WorkflowStatusSerializer,
@@ -28,7 +28,7 @@ from .serializers import (
 
 # models
 from .models import (
-    HikayaUser, Workspace, AccountType, AccountSubType,
+    HikayaUser, Workspace, AccountType, AccountSubType, Account,
     Location, Contact, Document, Office, Currency, LocationType,
     FundingStatus, WorkflowStatus, WorkflowLevel1Type, WorkflowLevel2Type,
     WorkflowLevel1, WorkflowLevel2, WorkflowLevel2Plan,
@@ -161,7 +161,7 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
 
 class HikayaUserViewSet(viewsets.ModelViewSet):
     """
-    HikayaUser View
+    HikayaUser ViewSet
     """
     model = HikayaUser
     serializer_class = HikayaUserSerializer
@@ -173,7 +173,7 @@ class HikayaUserViewSet(viewsets.ModelViewSet):
 
 class AccountTypeViewSet(viewsets.ModelViewSet):
     """
-    AccountType View
+    AccountType ViewSet
     """
     model = AccountType
     serializer_class = AccountTypeSerializer
@@ -184,7 +184,7 @@ class AccountTypeViewSet(viewsets.ModelViewSet):
 
 class AccountSubTypeViewSet(viewsets.ModelViewSet):
     """
-    AccountType View
+    AccountType ViewSet
     """
     model = AccountSubType
     serializer_class = AccountSubTypeSerializer
@@ -193,9 +193,20 @@ class AccountSubTypeViewSet(viewsets.ModelViewSet):
     lookup_field = 'sub_type_uuid'
 
 
+class AccountViewSet(viewsets.ModelViewSet):
+    """
+    Account ViewSet
+    """
+    model = Account
+    serializer_class = AccountSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = Account.objects.all()
+    lookup_field = 'account_uuid'
+
+
 class ContactViewSet(viewsets.ModelViewSet):
     """
-    Contact View
+    Contact ViewSet
     """
     model = Contact
     serializer_class = ContactSerializer
@@ -206,7 +217,7 @@ class ContactViewSet(viewsets.ModelViewSet):
 
 class LocationViewSet(viewsets.ModelViewSet):
     """
-    Location View
+    Location ViewSet
     """
     model = Location
     serializer_class = LocationSerializer
