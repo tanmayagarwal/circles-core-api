@@ -25,7 +25,7 @@ class Document(models.Model):
     create_date = models.DateTimeField(
         'Create Date', blank=True, null=True, editable=False)
     modified_date = models.DateTimeField(
-        'Edit Date', blank=True, null=True, editable=False)
+        'Modified Date', blank=True, null=True, editable=False)
     created_by = models.ForeignKey(
         User, verbose_name='Created By', editable=False, null=True,
         related_name='document_created_by', on_delete=models.SET_NULL)
@@ -114,8 +114,10 @@ class AccountType(models.Model):
         Workspace, blank=True, null=True,
         related_name='account_type_workspace', on_delete=models.SET_NULL)
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', blank=True, null=True)
-    modified_date = models.DateTimeField('Edit Date', blank=True, null=True)
+    create_date = models.DateTimeField('Create Date', blank=True, null=True,
+                                       editable=False)
+    modified_date = models.DateTimeField('Edit Date', blank=True, null=True,
+                                         editable=False)
     created_by = models.ForeignKey(
         User, verbose_name='Created By', editable=False, null=True,
         related_name='org_type_created_by', on_delete=models.SET_NULL)
@@ -224,9 +226,10 @@ class Account(models.Model):
         Workspace, blank=True, null=True, related_name='account_workspace',
         on_delete=models.SET_NULL)
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', null=True, blank=True)
+    create_date = models.DateTimeField(
+        'Create Date', null=True, blank=True, editable=False)
     modified_date = models.DateTimeField(
-        'Modified Date', null=True, blank=True)
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         User, verbose_name='Created By', related_name='org_created_by',
         editable=False, null=True, on_delete=models.SET_NULL)
@@ -275,8 +278,8 @@ class HikayaUser(models.Model):
         related_name='user_workspaces', blank=True)
     privacy_disclaimer_accepted = models.BooleanField(default=False)
     history = HistoricalRecords()
-    create_date = models.DateTimeField(null=True, blank=True)
-    edit_date = models.DateTimeField(null=True, blank=True)
+    create_date = models.DateTimeField(null=True, blank=True, editable=False)
+    modified_date = models.DateTimeField(null=True, blank=True, editable=False)
 
     class Meta:
         ordering = ('name',)
@@ -294,7 +297,7 @@ class HikayaUser(models.Model):
             self.create_date = timezone.now()
             self.name = '{} {}'.format(
                 self.user.first_name, self.user.last_name)
-        self.edit_date = timezone.now()
+        self.modified_date = timezone.now()
         super(HikayaUser, self).save()
 
 
@@ -313,9 +316,10 @@ class Office(models.Model):
         Account, blank=True, null=True, on_delete=models.SET_NULL,
         related_name='office_account')
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', null=True, blank=True)
+    create_date = models.DateTimeField(
+        'Create Date', null=True, blank=True, editable=False)
     modified_date = models.DateTimeField(
-        'Modified Date', null=True, blank=True)
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By',
         related_name='office_created_by', editable=False, null=True,
@@ -355,9 +359,10 @@ class Sector(models.Model):
         Account, blank=True, null=True, on_delete=models.SET_NULL,
         related_name='sector_account')
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', null=True, blank=True)
+    create_date = models.DateTimeField(
+        'Create Date', null=True, blank=True, editable=False)
     modified_date = models.DateTimeField(
-        'Modified Date', null=True, blank=True)
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='sector_created_by', on_delete=models.SET_NULL)
@@ -411,9 +416,10 @@ class Contact(models.Model):
         Account, blank=True, null=True, on_delete=models.SET_NULL,
         related_name='contact_account')
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', null=True, blank=True)
+    create_date = models.DateTimeField(
+        'Create Date', null=True, blank=True, editable=False)
     modified_date = models.DateTimeField(
-        'Modified Date', null=True, blank=True)
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='contact_created_by', on_delete=models.SET_NULL)
@@ -508,9 +514,10 @@ class AdministrativeLevel(models.Model):
         Account, blank=True, null=True, on_delete=models.SET_NULL,
         related_name='admin_level_account')
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', null=True, blank=True)
+    create_date = models.DateTimeField(
+        'Create Date', null=True, blank=True, editable=False)
     modified_date = models.DateTimeField(
-        'Modified Date', null=True, blank=True)
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created by', editable=False, null=True,
         related_name='admin_level_created_by', on_delete=models.SET_NULL)
@@ -561,8 +568,8 @@ class Country(models.Model):
     modified_by = models.ForeignKey(
         HikayaUser, verbose_name='Modified By', editable=False, null=True,
         related_name='country_modified_by', on_delete=models.SET_NULL)
-    create_date = models.DateTimeField(null=True, blank=True)
-    edit_date = models.DateTimeField(null=True, blank=True)
+    create_date = models.DateTimeField(null=True, blank=True, editable=False)
+    modified_date = models.DateTimeField(null=True, blank=True, editable=False)
 
     class Meta:
         ordering = ('country',)
@@ -620,9 +627,10 @@ class Location(models.Model):
         Workspace, blank=True, null=True,
         related_name='location_workspace', on_delete=models.SET_NULL)
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', null=True, blank=True)
+    create_date = models.DateTimeField(
+        'Create Date', null=True, blank=True, editable=False)
     modified_date = models.DateTimeField(
-        'Modified Date', null=True, blank=True)
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created by', blank=True, editable=False,
         null=True, related_name='location_created_by', on_delete=models.SET_NULL)
@@ -736,8 +744,10 @@ class FundingStatus(models.Model):
         'Funding Status UUID', editable=False, default=uuid.uuid4, unique=True)
     status = models.CharField('Funding Status', max_length=165)
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', blank=True, null=True)
-    modified_date = models.DateTimeField('Modified Date', blank=True, null=True)
+    create_date = models.DateTimeField(
+        'Create Date', blank=True, null=True, editable=False)
+    modified_date = models.DateTimeField(
+        'Modified Date', blank=True, null=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='fund_status_created_by', on_delete=models.SET_NULL)
@@ -772,7 +782,7 @@ class WorkflowStatus(models.Model):
         'Create Date', null=True, blank=True, editable=False)
     history = HistoricalRecords()
     modified_date = models.DateTimeField(
-        'Modified Date', null=True, blank=True)
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='wfl_status_created_by', on_delete=models.SET_NULL)
@@ -804,9 +814,11 @@ class WorkflowLevel1Type(models.Model):
         default=uuid.uuid4, unique=True)
     type = models.CharField(
         'Workflow IndicatorLevel 1 Type', max_length=100, unique=True)
-    create_date = models.DateTimeField('Create Date', blank=True, null=True)
+    create_date = models.DateTimeField(
+        'Create Date', blank=True, null=True, editable=False)
     history = HistoricalRecords()
-    modified_date = models.DateTimeField('Modified Date', blank=True, null=True)
+    modified_date = models.DateTimeField(
+        'Modified Date', blank=True, null=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='wfl1_type_created_by', on_delete=models.SET_NULL)
@@ -858,8 +870,10 @@ class WorkflowLevel1(models.Model):
         FundingStatus, verbose_name='Funding Status', blank=True, null=True,
         on_delete=models.SET_NULL)
     history = HistoricalRecords()
-    create_date = models.DateTimeField('Create Date', null=True, blank=True, editable=False)
-    edit_date = models.DateTimeField('Edit Date', null=True, blank=True)
+    create_date = models.DateTimeField(
+        'Create Date', null=True, blank=True, editable=False)
+    modified_date = models.DateTimeField(
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True, blank=True,
         related_name='wfl1_created_by', on_delete=models.SET_NULL)
@@ -893,7 +907,8 @@ class Approval(models.Model):
     history = HistoricalRecords()
     create_date = models.DateTimeField(
         'Create Date', null=True, blank=True, editable=False)
-    modified_date = models.DateTimeField('Modified Date', null=True, blank=True)
+    modified_date = models.DateTimeField(
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='approval_created_by', on_delete=models.SET_NULL)
@@ -925,9 +940,11 @@ class WorkflowLevel2Type(models.Model):
         default=uuid.uuid4, unique=True)
     type = models.CharField(
         'Workflow IndicatorLevel 2 Type', max_length=100, unique=True)
-    create_date = models.DateTimeField('Create Date', blank=True, null=True)
+    create_date = models.DateTimeField(
+        'Create Date', blank=True, null=True, editable=False)
     history = HistoricalRecords()
-    modified_date = models.DateTimeField('Modified Date', blank=True, null=True)
+    modified_date = models.DateTimeField(
+        'Modified Date', blank=True, null=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='level2_type_created_by', on_delete=models.SET_NULL)
@@ -989,7 +1006,8 @@ class WorkflowLevel2(models.Model):
     history = HistoricalRecords()
     create_date = models.DateTimeField(
         'Create Date', null=True, blank=True, editable=False)
-    modified_date = models.DateTimeField('Modified Date', null=True, blank=True)
+    modified_date = models.DateTimeField(
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='wfl2_created_by', on_delete=models.SET_NULL)
@@ -1032,7 +1050,8 @@ class WorkflowLevel2Plan(models.Model):
     history = HistoricalRecords()
     create_date = models.DateTimeField(
         'Create Date', null=True, blank=True, editable=False)
-    modified_date = models.DateTimeField('Modified Date', null=True, blank=True)
+    modified_date = models.DateTimeField(
+        'Modified Date', null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         HikayaUser, verbose_name='Created By', editable=False, null=True,
         related_name='wfl2_plan_created_by', on_delete=models.SET_NULL)

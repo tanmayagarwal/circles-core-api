@@ -16,7 +16,7 @@ schema_view = get_swagger_view(title='Circles Core API')
 urlpatterns = [
     # register admin site
     path('admin/', admin.site.urls),
-    # path('', schema_view),
+    path('', admin.site.urls),
     # add django rest browsable api urls
     path('api/v1/api-auth/', include('rest_framework.urls')),
     # swagger docs url
