@@ -44,11 +44,13 @@ INSTALLED_APPS = [
     'circlescore',
     'django_nose',
     'simple_history',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -145,7 +147,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-print('Base Directory::::', BASE_DIR)
 
 LOGIN_URL = '/api/v1/api-auth/login'
 LOGOUT_URL = 'api/v1/api-auth/logout'
@@ -176,3 +177,9 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+# CORS settings
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:4200',
+    'https://circles-frontend.hikaya.now.sh'
+]
