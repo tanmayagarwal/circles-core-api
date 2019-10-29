@@ -155,7 +155,9 @@ LOGIN_REDIRECT_URL = '/api/v1/documentation/'
 LOGOUT_REDIRECT_URL = '/api/v1/api-auth/login'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),
+    # For dev testing
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
