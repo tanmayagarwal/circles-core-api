@@ -185,3 +185,6 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:4200',
     'https://circles-frontend.hikaya.now.sh'
 ]
+CORS_ORIGIN_REGEX_WHITELIST = [
+    r"^\w+\.now\.sh",
+]
